@@ -34,4 +34,19 @@ def newUser():
         Writer.writerow([newUser.Name, newUser.Email, newUser.Pass, newUser.Balance])
     print(f"User {Name} has been added successfully.")
 
-newUser()
+def login():
+    print("--Login--")
+    emailInput=input("Enter Email   ")
+    passInput=input("Enter Password   ")
+
+    with open ("Users.csv", mode="r", newline="") as file:
+        reader=csv.reader(file)
+        next(reader)
+        for row in reader:
+            if row[1]==emailInput and row[2]==passInput:
+                print("Login Successful")
+                return User(row[0], row[1], row[2],row[3])
+    print("invald credentials.")
+    return None
+
+login()
