@@ -5,7 +5,7 @@ class User:
     def __init__(self,Name,Email,Passw,Balance):
         self.Name = Name
         self.Email = Email
-        self.Pass = Passw
+        self.Passw = Passw
         self.Wallet = Wallet(Balance)
 
 class Wallet:
@@ -24,14 +24,14 @@ def newUser():
     print("-- Create Account --")
     Name=input("Enter Name:   ").title()
 
-    Email=input("Enter Email:   ")
+    Email=input("Enter Email:   ").lower()
     if not re.match(r".+@.+",Email):
         print("Invalid Email, Try Again.")
         return
     
     print("Password must be at least 8 characters with 1 capital Letter and 2 numbers.")
     Passw=input("Enter Password   ")
-    if not re.match(r"^(?=.*[A-Z])(?=(?:.[0-9]){2,}.{8,}$)",Passw):
+    if not re.match(r"^(?=.*[A-Z])(?=(?:.[0-9]){2,}).{8,}",Passw):
         print("Passoword not safe, try another.")
         return
 
@@ -43,11 +43,11 @@ def newUser():
     newUser=User(Name,Email,Passw,Balance)
     with open ("Users.csv", mode="a", newline="") as file:
         Writer=csv.writer(file)
-        Writer.writerow([newUser.Name, newUser.Email, newUser.Pass, newUser.Balance])
+        Writer.writerow([newUser.Name, newUser.Email, newUser.Passw, newUser.Wallet.Balance])
     print(f"User {Name} has been added successfully.")
 
 def login():
-    
+
     print("-- Login --")
     emailInput=input("Enter Email   ")
     passInput=input("Enter Password   ")
@@ -63,8 +63,28 @@ def login():
     return None
 
 def menu(loggedIn):
-    print(-- "Welcome {loggedIn.Name} --")
-    print("Choose an option:")
+    print(f"-- Welcome {loggedIn.Name} --")
     print("1.   View accounts")
     print("2.   Deposit")
     print("3.   Withdraw")
+
+def main():
+   while True:
+        print(" Initialising program...")
+        print(" --WELCOME--")
+        print("1.   Sign up")
+        print("2.   Log in")
+        option = input("Have an account?")
+
+        if option == "1":
+            newUser()
+        elif option == "2":
+            loggedIn = login()
+            if loggedIn:
+                menu(loggedIn)
+        else:
+            print("That is not an option.")
+        break
+
+if __name__ == "__main__":
+    main()
