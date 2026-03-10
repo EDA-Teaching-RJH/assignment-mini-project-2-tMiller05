@@ -12,11 +12,17 @@ class Wallet:
     def __init__(self,Balance):
         self.Balance = float(Balance)
 
-    def addFunds(self,Balance):
+    def deposit(Balance):
         if amount > 0:
-            self.Balance += amount
-            return True
-        return False
+            Balance += amount
+            print(f"{amount} has been deposited.")
+    
+    def withdraw(Balance):
+        if amount > Balance:
+            print("Insufficient funds.")
+        else:
+            Balance =- amount
+            print(f"{amount}  has been withdrawn.")
 
 
 
@@ -64,12 +70,16 @@ def login():
 
 def menu(loggedIn):
     print(f"-- Welcome {loggedIn.Name} --")
-    print("1.   View accounts")
+    print("1.   View balance")
     print("2.   Deposit")
     print("3.   Withdraw")
+    choice = input("Choose an option.")
+    if choice == "1":
+        print(f"--You currently have £{loggedIn.Wallet.Balance}--")
+
 
 def main():
-   while True:
+    while True:
         print(" Initialising program...")
         print(" --WELCOME--")
         print("1.   Sign up")
@@ -84,7 +94,8 @@ def main():
                 menu(loggedIn)
         else:
             print("That is not an option.")
-        break
+            break
+            return False
 
 if __name__ == "__main__":
     main()
