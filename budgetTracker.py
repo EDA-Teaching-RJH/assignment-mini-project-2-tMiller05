@@ -2,11 +2,15 @@ import re
 import csv
 
 class User:
-    def __init__(self,Name,Email,Pass,Balance):
+    def __init__(self,Name,Email,Passw,Balance):
         self.Name = Name
         self.Email = Email
-        self.Pass = Pass
+        self.Pass = Passw
         self.Balance = float(Balance)
+
+class Wallet:
+    def __init__(self,Balance):
+        pass
 
 def newUser():
     print("-- Create Account --")
@@ -28,14 +32,14 @@ def newUser():
         print("Incorrect format, use 0.00.")
         return
     
-    newUser=User(Name,Email,Pass,Balance)
+    newUser=User(Name,Email,Passw,Balance)
     with open ("Users.csv", mode="a", newline="") as file:
         Writer=csv.writer(file)
         Writer.writerow([newUser.Name, newUser.Email, newUser.Pass, newUser.Balance])
     print(f"User {Name} has been added successfully.")
 
 def login():
-    print("--Login--")
+    print("-- Login --")
     emailInput=input("Enter Email   ")
     passInput=input("Enter Password   ")
 
@@ -49,4 +53,9 @@ def login():
     print("invald credentials.")
     return None
 
-login()
+def menu(loggedIn):
+    print(-- "Welcome {loggedIn.Name} --")
+    print("Choose an option:")
+    print("1.   View accounts")
+    print("2.   Deposit")
+    print("3.   Withdraw")
