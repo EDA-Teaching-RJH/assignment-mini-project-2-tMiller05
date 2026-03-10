@@ -6,11 +6,19 @@ class User:
         self.Name = Name
         self.Email = Email
         self.Pass = Passw
-        self.Balance = float(Balance)
+        self.Wallet = Wallet(Balance)
 
 class Wallet:
     def __init__(self,Balance):
-        pass
+        self.Balance = float(Balance)
+
+    def addFunds(self,Balance):
+        if amount > 0:
+            self.Balance += amount
+            return True
+        return False
+
+
 
 def newUser():
     print("-- Create Account --")
@@ -22,8 +30,8 @@ def newUser():
         return
     
     print("Password must be at least 8 characters with 1 capital Letter and 2 numbers.")
-    Pass=input("Enter Password   ")
-    if not re.match(r"^(?=.*[A-Z])(?=(?:.[0-9]){2})",Pass):
+    Passw=input("Enter Password   ")
+    if not re.match(r"^(?=.*[A-Z])(?=(?:.[0-9]){2,}.{8,}$)",Passw):
         print("Passoword not safe, try another.")
         return
 
@@ -39,6 +47,7 @@ def newUser():
     print(f"User {Name} has been added successfully.")
 
 def login():
+    
     print("-- Login --")
     emailInput=input("Enter Email   ")
     passInput=input("Enter Password   ")
