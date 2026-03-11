@@ -12,17 +12,19 @@ class Wallet:
     def __init__(self,Balance):
         self.Balance = float(Balance)
 
-    def deposit(Balance):
-        if amount > 0:
-            Balance += amount
-            print(f"{amount} has been deposited.")
-    
-    def withdraw(Balance):
-        if amount > Balance:
+    def deposit(self,amt):
+        if amt > 0:
+            self.Balance += amt
+            print(f"{amt} has been deposited.")
+            return True
+        return False
+        
+    def withdraw(self,amt):
+        if amt > self.Balance:
             print("Insufficient funds.")
         else:
-            Balance =- amount
-            print(f"{amount}  has been withdrawn.")
+            self.Balance =- amt
+            print(f"{amt}  has been withdrawn.")
 
 
 
@@ -69,13 +71,24 @@ def login():
     return None
 
 def menu(loggedIn):
-    print(f"-- Welcome {loggedIn.Name} --")
-    print("1.   View balance")
-    print("2.   Deposit")
-    print("3.   Withdraw")
-    choice = input("Choose an option.")
-    if choice == "1":
-        print(f"--You currently have £{loggedIn.Wallet.Balance}--")
+    while True:
+        print(f"-- Welcome {loggedIn.Name} --")
+        print("1.   View balance")
+        print("2.   Deposit")
+        print("3.   Withdraw")
+        choice = input("Choose an option.")
+        if choice == "1":
+            print(f"--  You currently have £{loggedIn.Wallet.Balance}  --")
+        if choice == "2":
+            amt=float(input("How much would you like to add?"))
+            if loggedIn.Wallet.deposit(amt):
+                print("Success!")
+            else:
+                print("Number must be positive.")
+        if choice == "3":
+            amt=float(input(""))
+
+            
 
 
 def main():
@@ -88,14 +101,16 @@ def main():
 
         if option == "1":
             newUser()
+            return False
         elif option == "2":
             loggedIn = login()
             if loggedIn:
                 menu(loggedIn)
+            return False
         else:
             print("That is not an option.")
             break
-            return False
+    
 
 if __name__ == "__main__":
     main()
