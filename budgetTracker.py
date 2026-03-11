@@ -20,10 +20,11 @@ class Wallet:
         return False
         
     def withdraw(self,amt):
+        currentBalance = self.Balance
         if amt > self.Balance:
             print("Insufficient funds.")
         else:
-            self.Balance =- amt
+            self.Balance = currentBalance - amt
             print(f"{amt}  has been withdrawn.")
 
 
@@ -70,23 +71,53 @@ def login():
     print("invald credentials.")
     return None
 
+def changeBalance(loggedIn):
+    rows = []
+    try:
+        with open ("Users.csv", mode="r", newline="") as file:
+            reader = csv.reader(file)
+            rows = list(reader)
+    except FileNotFoundError :
+        print("File not found.")
+        return
+    for row in rows:
+        if row[1] == loggedIn.Email:
+            row[3] = f"{loggedIn.Wallet.Balance:.2f}"
+            break
+        with open ("Users.csv", mode="w" , newline="") as file:
+            writer = csv.writer(file)
+            writer.writerows(rows)
+            
+
 def menu(loggedIn):
     while True:
         print(f"-- Welcome {loggedIn.Name} --")
         print("1.   View balance")
         print("2.   Deposit")
         print("3.   Withdraw")
+        print("4.   Exit")
         choice = input("Choose an option.")
         if choice == "1":
             print(f"--  You currently have £{loggedIn.Wallet.Balance}  --")
         if choice == "2":
-            amt=float(input("How much would you like to add?"))
+            amt=float(input("-- How much would you like to add? --"))
             if loggedIn.Wallet.deposit(amt):
                 print("Success!")
+                changeBalance(loggedIn)
             else:
                 print("Number must be positive.")
         if choice == "3":
-            amt=float(input(""))
+            amt=float(input("-- How much would you like to take out? --"))
+            if loggedIn.Wallet.withdraw(amt):
+                print("-- Success! --")
+                changeBalance(loggedIn)
+        elif choice =="4":
+            exit=input("    You wish to quit?   Y/N").upper()
+            if exit =="Y":
+                break
+        else:
+            print("That is not an option")
+            
 
             
 
@@ -97,6 +128,7 @@ def main():
         print(" --WELCOME--")
         print("1.   Sign up")
         print("2.   Log in")
+        print("3.   Cancel")
         option = input("Have an account?")
 
         if option == "1":
@@ -107,9 +139,12 @@ def main():
             if loggedIn:
                 menu(loggedIn)
             return False
+        elif option == "3":
+            print("Closing Program...")
+            break
         else:
             print("That is not an option.")
-            break
+            
     
 
 if __name__ == "__main__":
