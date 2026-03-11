@@ -17,7 +17,7 @@ class Wallet:
             self.Balance += amt
             print(f"{amt} has been deposited.")
             return True
-        return False
+        
         
     def withdraw(self,amt):
         currentBalance = self.Balance
@@ -26,6 +26,7 @@ class Wallet:
         else:
             self.Balance = currentBalance - amt
             print(f"{amt}  has been withdrawn.")
+            return True
 
 
 
@@ -84,7 +85,7 @@ def changeBalance(loggedIn):
         if row[1] == loggedIn.Email:
             row[3] = f"{loggedIn.Wallet.Balance:.2f}"
             break
-        with open ("Users.csv", mode="w" , newline="") as file:
+    with open ("Users.csv", mode="w", newline="") as file:
             writer = csv.writer(file)
             writer.writerows(rows)
             
@@ -99,18 +100,20 @@ def menu(loggedIn):
         choice = input("Choose an option.")
         if choice == "1":
             print(f"--  You currently have £{loggedIn.Wallet.Balance}  --")
-        if choice == "2":
+        elif choice == "2":
             amt=float(input("-- How much would you like to add? --"))
             if loggedIn.Wallet.deposit(amt):
                 print("Success!")
                 changeBalance(loggedIn)
+                
             else:
                 print("Number must be positive.")
-        if choice == "3":
+        elif choice == "3":
             amt=float(input("-- How much would you like to take out? --"))
             if loggedIn.Wallet.withdraw(amt):
                 print("-- Success! --")
                 changeBalance(loggedIn)
+                
         elif choice =="4":
             exit=input("    You wish to quit?   Y/N").upper()
             if exit =="Y":
