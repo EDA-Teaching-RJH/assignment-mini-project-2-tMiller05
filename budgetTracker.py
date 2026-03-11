@@ -7,6 +7,31 @@ class User:
         self.Email = Email
         self.Passw = Passw
         self.Wallet = Wallet(Balance)
+class PremUser(User):
+    cashbackRate = 0.5
+    overdraft = 200.00
+    def __init__(self,Name,Email,Passw,Balance):
+        super().__init__(Name,Email,Passw,Balance)
+        self.isPremium = True
+        self.cashback = 0.0
+    def withdraw(self, amt):
+        if amt<= 0:
+            print("amount must be positive")
+            return False
+        if amt > self.Wallet.Balance + self.overdraft:
+            print("Exceeds overdraft limit.")
+            return False
+        self.Wallet.Balance-=amt
+        cashback=round(amt*self.cashbackRate,2)
+        self.cashbackEarnt+=cashback
+        print(f"£{amt} withdrawn, you have earned £{self.cashback} cashback!")
+        return True
+    def redeem(self):
+        if self.cashbackEarnt <= 0:
+            print("There is no cashback to redeem")
+            return
+        self.Wallet.deposit(self.cashbackEarnt)
+        
 
 class Wallet:
     def __init__(self,Balance):
