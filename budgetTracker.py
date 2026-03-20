@@ -8,12 +8,12 @@ class User:
         self.Passw = Passw
         self.Wallet = Wallet(Balance)
 class PremUser(User):
-    cashbackRate = 0.5
+    cashbackRate = 0.05
     overdraft = 200.00
     def __init__(self,Name,Email,Passw,Balance):
         super().__init__(Name,Email,Passw,Balance)
         self.isPremium = True
-        self.cashback = 0.0
+        self.cashbackEarnt = 0.0
     def withdraw(self, amt):
         if amt<= 0:
             print("amount must be positive")
@@ -24,7 +24,7 @@ class PremUser(User):
         self.Wallet.Balance-=amt
         cashback=round(amt*self.cashbackRate,2)
         self.cashbackEarnt+=cashback
-        print(f"£{amt} withdrawn, you have earned £{self.cashback} cashback!")
+        print(f"£{amt} withdrawn, you have earned £{self.cashbackEarnt} cashback!")
         return True
     def redeem(self):
         if self.cashbackEarnt <= 0:
@@ -69,16 +69,20 @@ def newUser():
     if not re.match(r"^(?=.*[A-Z])(?=(?:.[0-9]){2,}).{8,}",Passw):
         print("Passoword not safe, try another.")
         return
+    Prem = input("Premium account? Y/N     ").upper()
 
     Balance = input("Enter initial balance:   ")
     if not re.match(r"^\d+(\.\d{1,2})?$",Balance):
         print("Incorrect format, use 0.00.")
         return
     
-    newUser=User(Name,Email,Passw,Balance)
+    if Prem == "Y":
+        newUser=PremUser(Name,Email,Passw,Balance)
+    else:
+        newUser=User(Name,Email,Passw,Balance)
     with open ("Users.csv", mode="a", newline="") as file:
         Writer=csv.writer(file)
-        Writer.writerow([newUser.Name, newUser.Email, newUser.Passw, newUser.Wallet.Balance])
+        Writer.writerow([newUser.Name, newUser.Email, newUser.Passw, newUser.Wallet.Balance, newUser.isPremium])
     print(f"User {Name} has been added successfully.")
 
 def login():
@@ -93,7 +97,10 @@ def login():
         for row in reader:
             if row[1]==emailInput and row[2]==passInput:
                 print("Login Successful")
-                return User(row[0], row[1], row[2],row[3])
+                if row[4] == "T":
+                    return PremUser(row[0],row[1], row[2], row[3])
+                else:
+                    return User(row[0], row[1], row[2],row[3])
     print("invald credentials.")
     return None
 
@@ -122,6 +129,9 @@ def menu(loggedIn):
         print("2.   Deposit")
         print("3.   Withdraw")
         print("4.   Exit")
+        if isinstance(loggedIn, PremUser):
+            print("5.   Redeem Cashback")
+
         choice = input("Choose an option.")
         if choice == "1":
             print(f"--  You currently have £{loggedIn.Wallet.Balance}  --")
@@ -135,7 +145,7 @@ def menu(loggedIn):
                 print("Number must be positive.")
         elif choice == "3":
             amt=float(input("-- How much would you like to take out? --"))
-            if loggedIn.Wallet.withdraw(amt):
+            if loggedIn.withdraw(amt):
                 print("-- Success! --")
                 changeBalance(loggedIn)
                 
@@ -143,6 +153,13 @@ def menu(loggedIn):
             exit=input("    You wish to quit?   Y/N").upper()
             if exit =="Y":
                 break
+        
+        elif choice == "5":
+                if isinstance(loggedIn, PremUser):
+                    loggedIn.redeem()
+                    changeBalance(loggedIn)
+                else:
+                    print("That is not an option")
         else:
             print("That is not an option")
             
