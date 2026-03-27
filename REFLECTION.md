@@ -1,0 +1,28 @@
+This is my developer journal; in retrospect I should have added to this each time I commited my code, but it's too late for that.
+
+My first stage of this project was brain-storming what I should do, I thought about making a budgeting system but felt that it wouldn't be a good way to demonstrate my understanding. I decided that a banking system similar to the banking app on my phone as I felt that I could use more of the skills showed in the last lectures and workshops.
+
+My first commit in my folder added a class called "User" and assigned values to its properties using the "__init__" method. I then added a "newUser" function so that I could add users to a "Users.csv" file where I could store account information so that the data would not be volatile and can be called upon in other instances.
+Within the "newUsers" function, I made it so that names would be saved as a title (so that users cannot enter their name in allcaps or all lowercase) and I used regex to ensure email formatting is valid. I then used regex again to try to add more security to each user's passwords, I also added formatting  checks to the balance so that there was not variation in the format. Finally I appended each new user to the "Users.csv" file under the headine line.
+
+My second commit added a "login" function where a user should input their email and password. The function reads the .csv file for a match and returns the specific user IF the credentials are correct.
+
+In my third commit, I added a place holder for a new "Wallet" class with the idea for that to do most of the maths and logistics. I also added a menu for users once they had logged in. With a plan to welcome the user by name, I made a place holder for the logged-in user's value that would be linked later.
+
+In my next commit I moved the balance from the "User" class to the "Wallet" class and added a function to add funds to the balance. I also added a "w" to the "Pass" attribute to make it easier to seperate it from any pass functions. At this point, I had found that the regex for the password would only check the content, but I wanted it to check for the minimum number of characters, so I added that to the account creation function.
+
+The commit after that, finally included my "main" function where the user can choose either to sign up or to login. If the user chooses to login, then the "login" function is called and is assigned to the value of "loggedin" which takes the user information to the "menu" function. I also added some more formatting to the email section of the "newUser" function so that it is all lowercase. I found that the csv writer was struggling to append the balance, so I altered the old "newUser.Balance" to the new "newUser.Wallet.Balance". In the menu function that I mentioned before, I found that the initial print wasn't working, so I corrected and added a formatting prefix to that the "{loggedIn.Name}" would give the actual user's name. 
+
+I then changed the "addFunds" function and added a "withdraw" function to the "Wallet" class. The "deposit" function first checks the "amount" that the user wants to add then, if the "amount" is greater than 0, is added along with a message to confirm that the amount has been deposited. The "withdraw" function first checks that the "amount" that wants to be withdrawn isn't greater than the "Balance", then takes the "amount" away and displays a confirmation message.
+Then I added some more content to the "menu" function -sporadic i know...- so that you can choose an option, and if you choose option 1, then the balance is displayed.
+
+The next commit comes after another coursemate and I check eachother's code, for a fresh set of eyes's opinion. 
+I altered the functions within the "Wallet" class slightly to make the amount, or "amt" abreviated, callable from the later functions and fixed the "Balance" so that it would display the "self.Balance" of the logged in user. I then added more to the "menu" function for more functionality, adding the choice to deposit money, and a start to the withdrawing option.
+
+This next commit is quite a heavy one, I started off changing the "withdraw" function by adding the "currentBalance" so that I can make the subtraction easier to read. I also added a new function that would be called everytime the balance needed to change in the csv file, to save having to do it within each function individually. I then finished the withdraw and deposit function using this "changeBalance" function. I also added some means to exit/cancel the program due to there being some infinite loops due to my use of "while True".
+
+The next commit shows my first finished version "V1.0", where I just changed a few things, like the unnecessary "return False" in the deposit function and i changed most of the "if" statements in the menu to "elif" statements.
+
+In Version 1.1 I added a subclass to the "User" class called "PremUser" where Premium Users can earn cashback on their withdrawals and make use of a £200 overdraft. In this class I added its own "withdraw" function that works differently to that in the "wallet" class so that the overdraft can be utilised. I added a new "redeem" function so that Premium users can redeem the cashback that they earned.
+
+In Version 1.2, I finally made the benefits from being a Premium User usable. To make this work I learned how the "isinstance" function worked so that if a premium user is detected, some functions appear that otherwise wouldn't. I also added a part to the "newUser" function to determine whether a user was Premium or not, so that this wasvisiblein the csv file. Using this new column I can limit what options are presented to users.
